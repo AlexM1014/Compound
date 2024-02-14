@@ -766,6 +766,7 @@ GameObject:
   - component: {fileID: 595581606}
   - component: {fileID: 595581608}
   - component: {fileID: 595581607}
+  - component: {fileID: 595581609}
   m_Layer: 0
   m_Name: Spot Light
   m_TagString: Untagged
@@ -873,6 +874,19 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &595581609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 595581605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed420edd89d1d6b47bee137862f2d976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TestObject: {fileID: 2001603858}
 --- !u!1 &694206319
 GameObject:
   m_ObjectHideFlags: 0
@@ -1402,7 +1416,7 @@ GameObject:
   - component: {fileID: 2001603859}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: TestHiddenTexture
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1487,7 +1501,7 @@ Transform:
   m_GameObject: {fileID: 2001603858}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.002, y: 1.855, z: 13.142}
+  m_LocalPosition: {x: -3.184, y: 1.855, z: 16.45}
   m_LocalScale: {x: 2.6541, y: 2.6667712, z: 2.6518}
   m_ConstrainProportionsScale: 0
   m_Children: []

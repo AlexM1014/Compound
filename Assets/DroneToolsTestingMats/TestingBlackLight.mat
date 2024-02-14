@@ -42,11 +42,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - TestAlpha: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _TestObjectAlpha: 1
     m_Colors:
     - _BlackLightColor: {r: 1, g: 1, b: 1, a: 0}
-    - _Test: {r: 0.041301847, g: 1, b: 0, a: 0}
+    - _Test: {r: 1, g: 0, b: 0, a: 0}
+    - _TestColor: {r: 0, g: 0.8107328, b: 1, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &4379650922577654287
 MonoBehaviour:
