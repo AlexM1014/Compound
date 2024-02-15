@@ -67,7 +67,7 @@ Material:
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _CastShadows: 1
-    - _ColorOverlayOpacity: 0
+    - _ColorOverlayOpacity: 1
     - _Cull: 2
     - _CustomColor: 1
     - _DstBlend: 0
@@ -76,7 +76,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.397
+    - _Smoothness: 0.4
     - _SrcBlend: 1
     - _Surface: 0
     - _WorkflowMode: 1
@@ -84,13 +84,13 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _Blue_Area_Color: {r: 0.9607843, g: 0.68235296, b: 0.48235294, a: 0}
-    - _ColorOverlay: {r: 1, g: 1, b: 1, a: 0}
+    - _Blue_Area_Color: {r: 0.28627452, g: 0.28627452, b: 0.28627452, a: 0}
+    - _ColorOverlay: {r: 0.28627452, g: 0.28627452, b: 0.28627452, a: 0}
     - _Emission_Color: {r: 1, g: 1, b: 1, a: 0}
-    - _Green_Area_Color: {r: 0.81960785, g: 0.43529412, b: 0.23921569, a: 0}
-    - _Red_Area_Color: {r: 0.9607843, g: 0.68235296, b: 0.48235294, a: 0}
+    - _Green_Area_Color: {r: 0.49355236, g: 0.6089922, b: 0.72327036, a: 0}
+    - _Red_Area_Color: {r: 0.28627452, g: 0.28627452, b: 0.28627452, a: 0}
     - _UV_Tiling: {r: 1, g: 1, b: 0, a: 0}
-    - _White_Area_Color: {r: 0.8627451, g: 0.8627451, b: 0.92941177, a: 0}
+    - _White_Area_Color: {r: 0.49411765, g: 0.6117647, b: 0.7254902, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &9206863968740048964
 MonoBehaviour:
