@@ -22,7 +22,7 @@ Material:
   stringTagMap:
     RenderType: TransparentCutout
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties: _Blue_Area_Color
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -84,13 +84,13 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _Blue_Area_Color: {r: 0.28627452, g: 0.28627452, b: 0.28627452, a: 0}
+    - _Blue_Area_Color: {r: 0.8627451, g: 0.8627451, b: 0.92941177, a: 0}
     - _ColorOverlay: {r: 0.28627452, g: 0.28627452, b: 0.28627452, a: 0}
     - _Emission_Color: {r: 1, g: 1, b: 1, a: 0}
-    - _Green_Area_Color: {r: 0.49355236, g: 0.6089922, b: 0.72327036, a: 0}
+    - _Green_Area_Color: {r: 0.8627451, g: 0.8627451, b: 0.92941177, a: 0}
     - _Red_Area_Color: {r: 0.28627452, g: 0.28627452, b: 0.28627452, a: 0}
     - _UV_Tiling: {r: 1, g: 1, b: 0, a: 0}
-    - _White_Area_Color: {r: 0.49411765, g: 0.6117647, b: 0.7254902, a: 0}
+    - _White_Area_Color: {r: 0.8627451, g: 0.8627451, b: 0.92941177, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &9206863968740048964
 MonoBehaviour:
