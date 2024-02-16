@@ -5,32 +5,76 @@ using UnityEngine;
 
 public class Blacklight : MonoBehaviour
 {
-    public Shader colliderMat;
-    public GameObject TestObject;
+    MeshRenderer meshRenderer;
 
-    private void Update()
+    bool isFadingIn;
+    bool isFadingOut;
+
+    public float timeElapsed;
+    public float lerpDuration = 0.5f;
+
+    IEnumerator Reveal(Collider other)
     {
-        if (Input.GetKey(KeyCode.Space))
+        isFadingIn = true;
+        if (timeElapsed > lerpDuration) timeElapsed = 0;
+
+        meshRenderer = other.gameObject.GetComponent<MeshRenderer>();
+        meshRenderer.enabled = true;
+
+        while (timeElapsed < lerpDuration && isFadingIn)
         {
-            ChangeAlpha();
+            timeElapsed += Time.deltaTime;
+            meshRenderer.material.SetFloat("_TestAlphaLerp", Mathf.Lerp(1, 0, timeElapsed / lerpDuration));
+
+            Debug.Log("Fading in - " + timeElapsed);
+
+            yield return null;
+        }
+
+        isFadingIn = false;
+    }
+
+    IEnumerator Fade(Collider other)
+    {
+        isFadingOut = true;
+        if (timeElapsed > lerpDuration) timeElapsed = 0;
+
+        meshRenderer = other.gameObject.GetComponent<MeshRenderer>();
+
+        while (timeElapsed < lerpDuration && isFadingOut)
+        {
+            timeElapsed += Time.deltaTime;
+            meshRenderer.material.SetFloat("_TestAlphaLerp", Mathf.Lerp(0, 1, timeElapsed / lerpDuration));
+
+            Debug.Log("Fading out - " + timeElapsed);
+
+            yield return null;
+        }
+
+        isFadingOut = false;
+        meshRenderer.enabled = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other != null)
+        {
+            if (other.gameObject.CompareTag("TestHiddenTexture"))
+            {
+                isFadingOut = false;
+                StartCoroutine(Reveal(other));
+            }
         }
     }
 
-    void ChangeAlpha()
+    private void OnTriggerExit(Collider other)
     {
-        Material testMaterial = TestObject.GetComponent<MeshRenderer>().material;
-        testMaterial.SetFloat("_TestColorAlpha", Mathf.Lerp(1, 100, Time.deltaTime));
-        testMaterial.SetFloat("_TestObjectAlpha", Mathf.Lerp(1, 100, Time.deltaTime));
-        Debug.Log("Change Alpha");
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision != null)
+        if (other != null)
         {
-            if (collision.gameObject.CompareTag("TestHiddenTexture"))
+            if (other.gameObject.CompareTag("TestHiddenTexture"))
             {
-                colliderMat.GetComponent<MeshRenderer>().material.SetFloat("TestAlpha", Mathf.Lerp(1, 0, Time.deltaTime * 2));
+                isFadingIn = false;
+                StartCoroutine(Fade(other));
             }
         }
     }
