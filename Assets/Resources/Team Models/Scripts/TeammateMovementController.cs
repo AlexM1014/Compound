@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering.Universal;
 
 public class TeammateMovementController : MonoBehaviour
 {
-    private NavMeshAgent agent;
+    private NavMeshAgent navAgent;
     private Animator animator;
 
     [SerializeField]
@@ -13,67 +15,126 @@ public class TeammateMovementController : MonoBehaviour
 
     private Coroutine movementRoutine;
 
+    private BaseDoor currentDoor;
+    private bool isStandbyDoor = false;
+
     [SerializeField]
     private float movementInterval = 2.5f;
-    private float movementTimer;
-
-    private float movementPause = 0f;
-    private float animInterval = 1f;
 
     [SerializeField]
     private float rotateSpeed = 90f;
 
+    [SerializeField]
+    private bool allowTestingControls = false;
+
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        navAgent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         Debug.Log(animator);
-
-        movementTimer = 2f;
     }
 
     void Update()
     {
-        HandleDestinations();
         HandleAnims();
+        if (allowTestingControls) HandleTestingControls();
     }
 
+    /// <summary>
+    /// Function to update animation variables
+    /// </summary>
     private void HandleAnims()
     {
-        movementPause -= Time.deltaTime;
-        animator.SetFloat("Velocity", agent.velocity.magnitude);
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            animator.SetTrigger("Kick");
-            movementPause = animInterval;
-        }
+        animator.SetFloat("Velocity", navAgent.velocity.magnitude);
     }
 
-    private void HandleDestinations()
+    /// <summary>
+    /// Test function to listen for input to call certain actions
+    /// </summary>
+    private void HandleTestingControls()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             MoveToDoor(ReturnRandomDoor());
         }
 
-/*        movementTimer -= Time.deltaTime;
-        if (movementTimer < 0)
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
-            movementTimer = movementInterval;
-            MoveToDoor(ReturnRandomDoor());
-        }*/
+            OpenDoor(currentDoor);
+        }
     }
 
+    /// <summary>
+    /// Test function for returning a random door from a test list
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="UnassignedReferenceException"></exception>
     private BaseDoor ReturnRandomDoor()
     {
         if (targets.Length == 0) throw new UnassignedReferenceException("No Doors assigned to teammember");
 
-        return targets[Random.Range(0, targets.Length)];
+        return targets[UnityEngine.Random.Range(0, targets.Length)];
     }
 
-    private void MoveToDoor(BaseDoor baseDoor)
+    /// <summary>
+    /// Opens door passed in, will only open if matches current door
+    /// </summary>
+    /// <param name="baseDoor"></param>
+    public void OpenDoor(BaseDoor baseDoor)
+    {
+        // TODO Add animation trigger to tell door to open when animation plays
+        if (CanOpenDoor(baseDoor))
+        {
+            animator.SetTrigger("Kick");
+        }
+    }
+
+    private bool CanOpenDoor(BaseDoor baseDoor)
+    {
+        if (baseDoor == null)
+        {
+            Debug.LogError("Not at a door, skipping kick animation");
+            return false;
+        }
+
+        if (baseDoor != currentDoor)
+        {
+            Debug.LogError("Door does not match current door, skipping kick animation");
+            return false;
+        }
+
+        if (movementRoutine != null)
+        {
+            Debug.LogError("Teammate is moving, skipping kick animation");
+            return false;
+        }
+
+        if (!IsStandbyDoor())
+        {
+            Debug.LogError("Teammate is not in position, skipping kick animation");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Animation event function to play door animation when trigger hits
+    /// </summary>
+    public void PlayDoorOpen()
+    {
+        // currentDoor.PlayAnim()
+        Debug.Log("Door anim plays here");
+    }
+
+    /// <summary>
+    /// Moves the teammate towards passed in door
+    /// </summary>
+    /// <param name="baseDoor"></param>
+    public void MoveToDoor(BaseDoor baseDoor)
     {
         BaseDoor doorComponent = baseDoor.GetComponent<BaseDoor>();
+        currentDoor = doorComponent;
         GameObject targetTransform = doorComponent.movementTarget;
         MoveToDestination(targetTransform);
     } 
@@ -90,17 +151,17 @@ public class TeammateMovementController : MonoBehaviour
 
     private IEnumerator PerformMoveToTransform(GameObject target)
     {
-        agent.isStopped = false;
+        navAgent.isStopped = false;
         Transform targetTransform = target.transform;
-        agent.SetDestination(targetTransform.position);
+        navAgent.SetDestination(targetTransform.position);
 
         //Wait a frame for remaningDistance to be generated
         yield return null;
 
         // Wait until at destination
         Debug.Log("Walking towards destination");
-        while (agent.remainingDistance > 0.1f) { yield return null; }
-        agent.isStopped = true;
+        while (navAgent.remainingDistance > 0.1f) { yield return null; }
+        navAgent.isStopped = true;
 
         // Rotate towards direction of movementTarget
         Debug.Log("Arrived at destination, rotating...");
@@ -115,19 +176,15 @@ public class TeammateMovementController : MonoBehaviour
             angle = Quaternion.Angle(toRotation, transform.rotation);
         } while (System.Math.Abs(angle) > 0.2);
         Debug.Log("Rotating stopped!");
+
+        // Remove coroutine as its over
+        movementRoutine = null;
     }
 
-
-
-    private void SetNewDestination()
+    private bool IsStandbyDoor()
     {
-        if (targets.Length == 0)
-        {
-            Debug.LogWarning("Agent has no location to move to");
-            return;
-        }
-
-        int randSpot = Random.Range(0, targets.Length);
-        agent.SetDestination(targets[randSpot].transform.position);
+        //Check if agent is at target location for door
+        //Debug.Log(navAgent.remainingDistance);
+        return (navAgent.remainingDistance < 0.2f);
     }
 }
